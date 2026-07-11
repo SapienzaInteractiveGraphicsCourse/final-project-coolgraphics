@@ -12,17 +12,8 @@ HTML-based control panel.
 
 ## How to Run
 
-```bash
-npm install
-npm run dev
-npm run build
-```
+**Live demo (GitHub Pages) [here](https://sapienzainteractivegraphicscourse.github.io/final-project-coolgraphics/).**
 
-For a local preview of the production build:
-
-```bash
-npm run preview
-```
 
 ## Controls
 
@@ -52,3 +43,7 @@ by `THREE.WebGLRenderer`.
 | `@tweenjs/tween.js` | Timed animations for doors, sarcophagus lid, Moai mouth motion, statue hopping and player walk blending |
 | Vite | Development server and production build tool |
 | Browser Canvas 2D API | Runtime procedural textures converted into `THREE.CanvasTexture` |
+
+## Documentation
+
+The full **technical presentation and user manual** is in[`Documentation.pdf`](Documentation.pdf).
