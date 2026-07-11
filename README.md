@@ -12,7 +12,7 @@ HTML-based control panel.
 
 ## How to Run
 
-**Live demo (GitHub Pages) [here](https://sapienzainteractivegraphicscourse.github.io/final-project-coolgraphics/).**
+**Live demo (GitHub Pages):** https://sapienzainteractivegraphicscourse.github.io/final-project-coolgraphics/ 
 
 
 ## Controls
