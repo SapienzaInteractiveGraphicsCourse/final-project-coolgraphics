@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Night at the Museum</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --museum-font-family: "Times New Roman", Times, serif;
+        --papyrus-panel-image: url("/interactive_graphics-/assets/papyrus_vertical-B4pR7t0p.png");
+        --papyrus-loading-image: url("/interactive_graphics-/assets/papyrus_loading_horizontal-xCJsCXjA.png");
+        --museum-ink: #120802;
+        --museum-muted: #1d0e04;
+        --museum-gold: #6f461f;
+        --museum-panel: rgba(183, 128, 62, 0.18);
+        --museum-panel-soft: rgba(112, 67, 28, 0.12);
+        font-family: var(--museum-font-family);
+        background: #090806;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+        color: var(--museum-ink);
+      }
+
+      body.app-loading canvas,
+      body.app-loading #ui-root {
+        visibility: hidden;
+      }
+
+      canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      #ui-root {
+        position: fixed;
+        inset: 16px auto auto 16px;
+        z-index: 10;
+        width: min(620px, calc(100vw - 32px));
+        pointer-events: none;
+      }
+
+      .museum-panel {
+        position: relative;
+        overflow: hidden;
+        border: 0;
+        min-height: min(585px, calc(100vh - 32px));
+        background: transparent var(--papyrus-panel-image) center / 100% 100% no-repeat;
+        box-shadow: none;
+        padding: clamp(72px, 10vh, 90px) 150px clamp(56px, 8vh, 74px) 142px;
+        pointer-events: auto;
+      }
+
+      .museum-panel-header {
+        position: relative;
+        display: grid;
+        gap: 3px;
+        margin: 4px 0 12px;
+        padding: 0 0 7px;
+        border-bottom: 1px solid rgba(87, 53, 23, 0.34);
+      }
+
+      .museum-accession,
+      .loading-accession {
+        color: var(--museum-muted);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .museum-wake-panel {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 10px;
+        width: 100%;
+        max-width: 100%;
+        border: 0;
+        background: var(--museum-panel-soft);
+        box-shadow: none;
+        padding: 7px 8px;
+        color: var(--museum-ink);
+        font-size: 13px;
+        font-weight: 640;
+        line-height: 1.25;
+        pointer-events: none;
+      }
+
+      .museum-wake-panel .museum-key {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        flex: 0 0 auto;
+        border: 0;
+        border-radius: 4px;
+        background: rgba(84, 50, 19, 0.14);
+        color: var(--museum-ink);
+        font-weight: 800;
+      }
+
+      .museum-panel h1 {
+        margin: 0;
+        color: #0d0501;
+        font-size: 22px;
+        line-height: 1.2;
+        font-weight: 820;
+      }
+
+      .museum-grid {
+        display: grid;
+        gap: 0;
+        font-size: 13px;
+        font-weight: 640;
+        color: var(--museum-ink);
+      }
+
+      .museum-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 8px;
+        min-height: 27px;
+        border-bottom: 1px dotted rgba(87, 53, 23, 0.28);
+      }
+
+      .museum-key {
+        color: var(--museum-muted);
+        font-weight: 680;
+      }
+
+      .museum-section-row {
+        min-height: 23px;
+        margin: 7px 0 3px;
+        border: 0;
+        background: rgba(112, 67, 28, 0.12);
+      }
+
+      .museum-section-row:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .museum-section-row .museum-key {
+        padding-left: 8px;
+        color: #140802;
+        font-size: 12px;
+        font-weight: 820;
+        text-transform: uppercase;
+      }
+
+      .museum-value {
+        color: #0d0501;
+        font-weight: 700;
+        min-width: 0;
+        text-align: right;
+        justify-self: end;
+      }
+
+      .museum-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .museum-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 32px;
+        border: 0;
+        border-radius: 0;
+        background: rgba(84, 50, 19, 0.14);
+        color: var(--museum-ink);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 780;
+        text-align: center;
+        appearance: none;
+        cursor: pointer;
+      }
+
+      select.museum-control {
+        padding-inline: 6px;
+      }
+
+      .museum-control:hover {
+        background: rgba(84, 50, 19, 0.2);
+      }
+
+      .museum-intensity {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 6px 12px;
+        margin-top: 10px;
+        color: var(--museum-ink);
+        font-size: 14px;
+      }
+
+      .museum-intensity[hidden] {
+        display: none;
+      }
+
+      .museum-intensity output {
+        color: #0d0501;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .museum-intensity input {
+        grid-column: 1 / -1;
+        width: 100%;
+        accent-color: var(--museum-gold);
+        cursor: pointer;
+      }
+
+      #loading-root {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #090806;
+        opacity: 1;
+        transition: opacity 320ms ease;
+      }
+
+      #loading-root.loading-screen-hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #loading-root[hidden] {
+        display: none;
+      }
+
+      .loading-panel {
+        position: relative;
+        overflow: hidden;
+        width: min(780px, calc(100vw - 48px));
+        border: 0;
+        min-height: min(430px, calc(100vh - 48px));
+        background: transparent var(--papyrus-loading-image) center / 100% 100% no-repeat;
+        box-shadow: none;
+        padding: 92px 180px 82px 172px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .loading-panel h1 {
+        margin: 0 0 18px;
+        color: #0d0501;
+        font-size: clamp(28px, 4vw, 38px);
+        line-height: 1.2;
+        font-weight: 820;
+        white-space: nowrap;
+      }
+
+      .loading-status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        color: var(--museum-ink);
+        font-size: 13px;
+      }
+
+      .loading-value {
+        color: #0d0501;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .loading-track {
+        height: 8px;
+        margin-top: 12px;
+        overflow: hidden;
+        border: 0;
+        border-radius: 0;
+        background: rgba(84, 50, 19, 0.14);
+        background-image: repeating-linear-gradient(90deg, transparent 0 23px, rgba(87, 53, 23, 0.16) 23px 24px);
+      }
+
+      .loading-bar {
+        width: 0;
+        height: 100%;
+        background: rgba(59, 36, 18, 0.72);
+        transition: width 180ms ease;
+      }
+
+      .loading-screen-error .loading-status-row {
+        color: #ffb8b8;
+      }
+
+      @media (max-width: 420px) {
+        #ui-root {
+          inset: 8px auto auto 8px;
+          width: calc(100vw - 16px);
+        }
+
+        .museum-panel {
+          padding-inline: 22%;
+        }
+
+        .loading-panel {
+          width: calc(100vw - 16px);
+          min-height: min(340px, calc(100vh - 16px));
+          padding: 72px 22% 64px;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="/interactive_graphics-/assets/index-B27W8wqg.js"></script>
+  </head>
+  <body class="app-loading">
+    <div id="loading-root">
+      <section class="loading-panel" aria-live="polite">
+        <h1>Night at the Museum</h1>
+        <div class="loading-status-row">
+          <span data-loading-status>Preparing scene</span>
+          <span class="loading-value" data-loading-value>0%</span>
+        </div>
+        <div class="loading-track" aria-hidden="true">
+          <div class="loading-bar" data-loading-bar></div>
+        </div>
+      </section>
+    </div>
+    <div id="ui-root"></div>
+  </body>
+</html>

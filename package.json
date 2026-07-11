@@ -1,0 +1,18 @@
+{
+  "name": "night-at-the-museum",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build --base=/interactive_graphics-/ --outDir docs",
+    "preview": "vite preview --host 0.0.0.0 --outDir docs --base=/interactive_graphics-/"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^25.0.0",
+    "three": "^0.179.1"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
