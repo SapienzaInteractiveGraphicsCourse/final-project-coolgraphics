@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build --base=/interactive_graphics-/ --outDir docs",
-    "preview": "vite preview --host 0.0.0.0 --outDir docs --base=/interactive_graphics-/"
+    "build": "vite build --base=/final-project-coolgraphics/ --outDir docs",
+    "preview": "vite preview --host 0.0.0.0 --outDir docs --base=/final-project-coolgraphics/"
   },
   "dependencies": {
     "@tweenjs/tween.js": "^25.0.0",
