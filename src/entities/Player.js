@@ -165,6 +165,13 @@ export class Player {
     this.modelMeshes = [];
     model.traverse(child => {
       if (child.isMesh) {
+        child.frustumCulled = false;
+        if (child.isSkinnedMesh) {
+          child.customDepthMaterial = new THREE.MeshDepthMaterial({
+            depthPacking: THREE.RGBADepthPacking
+          });
+          child.customDistanceMaterial = new THREE.MeshDistanceMaterial();
+        }
         this.modelMeshes.push(child);
       }
     });
