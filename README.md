@@ -1,6 +1,6 @@
 # Night at the Museum
 
-** Luca Conti 1702084, Samuele Tomassacci 2216267 **
+**Luca Conti 1702084, Samuele Tomassacci 2216267**
 
 Night at the Museum is a browser-based interactive 3D scene built with
 Three.js, JavaScript ES modules, tween.js and Vite. The player controls a museum
